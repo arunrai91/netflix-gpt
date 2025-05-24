@@ -4,11 +4,15 @@ import { checkFormData } from "../utils/validate";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isSignForm, setIsSignForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -53,6 +57,18 @@ const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           console.log(user);
+          updateProfile(user, {
+            displayName: fullname.current.value,
+          })
+            .then(() => {
+              const { uid, email, displayName } = auth.currentUser;
+              dispatch(
+                addUser({ uid: uid, email: email, displayName: displayName })
+              );
+            })
+            .catch((error) => {
+              console.log(error);
+            });
           navigate("/browse");
         })
         .catch((error) => {
@@ -108,7 +124,7 @@ const Login = () => {
         />
         {errorMessage && <p className="text-red-700">{errorMessage}</p>}
         <button
-          className="p-3 my-6 bg-red-700 w-full rounded-lg"
+          className="p-3 my-6 bg-red-700 w-full rounded-lg cursor-pointer"
           onClick={handleSubmitClick}
         >
           {isSignForm ? "Sign In" : "Sign Up"}
