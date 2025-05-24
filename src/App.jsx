@@ -1,13 +1,7 @@
-import "./App.css";
+import Body from "./components/Body";
 
 function App() {
-  return (
-    <>
-      <div class="columns-3xs">
-        <h2>Hello</h2>
-      </div>
-    </>
-  );
+  return <Body />;
 }
 
 export default App;
