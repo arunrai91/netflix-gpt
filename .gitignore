@@ -23,4 +23,4 @@ dist-ssr
 *.sw?
 
 # ignored by developer
-utils/firebase.jsx
+src/utils/firebase.jsx
